@@ -141,6 +141,7 @@ class Mc_Functionality_Admin {
 	public function register_ajax_handlers() {
 		add_action( 'wp_ajax_mc_functionality_get_snippet', array( $this, 'ajax_get_snippet' ) );
 		add_action( 'wp_ajax_mc_functionality_save_snippet', array( $this, 'ajax_save_snippet' ) );
+		add_action( 'wp_ajax_mc_functionality_create_snippet', array( $this, 'ajax_create_snippet' ) );
 	}
 
 	/**
@@ -237,6 +238,101 @@ class Mc_Functionality_Admin {
 			'message' => 'File saved successfully',
 			'filename' => $filename,
 		) );
+	}
+
+	/**
+	 * AJAX handler to create a new snippet file.
+	 *
+	 * @since    1.0.0
+	 */
+	public function ajax_create_snippet() {
+		// Verify nonce
+		if ( ! wp_verify_nonce( $_POST['nonce'], 'mc_functionality_editor_nonce' ) ) {
+			wp_die( 'Security check failed' );
+		}
+
+		// Check permissions
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( 'Insufficient permissions' );
+		}
+
+		$name = sanitize_text_field( $_POST['name'] );
+		$description = sanitize_textarea_field( $_POST['description'] );
+		
+		// Validate name
+		if ( empty( $name ) ) {
+			wp_send_json_error( 'Snippet name is required' );
+		}
+
+		// Generate filename from name
+		$filename = $this->generate_filename_from_name( $name );
+		
+		// Check if file already exists
+		$file_path = MC_FUNCTIONALITY_SNIPPETS_DIR . '/' . $filename;
+		if ( file_exists( $file_path ) ) {
+			wp_send_json_error( 'A snippet with this name already exists' );
+		}
+
+		// Generate initial content
+		$content = $this->generate_snippet_template( $name, $description );
+
+		// Write file content
+		$result = file_put_contents( $file_path, $content );
+		if ( $result === false ) {
+			wp_send_json_error( 'Unable to create file' );
+		}
+
+		wp_send_json_success( array(
+			'message' => 'Snippet created successfully',
+			'filename' => $filename,
+			'content' => $content,
+		) );
+	}
+
+	/**
+	 * Generate a filename from a snippet name.
+	 *
+	 * @since    1.0.0
+	 * @param    string    $name    The snippet name.
+	 * @return   string              The generated filename.
+	 */
+	private function generate_filename_from_name( $name ) {
+		// Convert to lowercase
+		$filename = strtolower( $name );
+		
+		// Replace spaces and special characters with dashes
+		$filename = preg_replace( '/[^a-z0-9\s-]/', '', $filename );
+		$filename = preg_replace( '/[\s-]+/', '-', $filename );
+		$filename = trim( $filename, '-' );
+		
+		// Ensure it ends with .php
+		if ( ! str_ends_with( $filename, '.php' ) ) {
+			$filename .= '.php';
+		}
+		
+		return $filename;
+	}
+
+	/**
+	 * Generate initial snippet template content.
+	 *
+	 * @since    1.0.0
+	 * @param    string    $name         The snippet name.
+	 * @param    string    $description  The snippet description.
+	 * @return   string                  The template content.
+	 */
+	private function generate_snippet_template( $name, $description ) {
+		$template = "<?php\n";
+		$template .= "/**\n";
+		$template .= " * " . esc_html( $name ) . "\n";
+		$template .= " * \n";
+		$template .= " * " . esc_html( $description ) . "\n";
+		$template .= " * \n";
+		$template .= " * @package Mc_Functionality\n";
+		$template .= " */\n\n";
+		$template .= "// Your code here\n";
+		
+		return $template;
 	}
 
 }

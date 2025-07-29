@@ -63,6 +63,13 @@ $loaded_snippets = $snippet_loader->get_loaded_snippets();
 					</table>
 				</div>
 			<?php endif; ?>
+			
+			<div class="mc-add-snippet-section">
+				<button type="button" class="button button-primary" id="mc-add-snippet-btn">
+					<span class="dashicons dashicons-plus-alt2"></span>
+					Add Snippet
+				</button>
+			</div>
 		</div>
 
 		<div class="mc-functionality-usage">
@@ -131,12 +138,34 @@ add_action( 'wp_footer', function() {
 			</button>
 		</div>
 		<div class="mc-modal-body">
-			<div class="mc-editor-container">
-				<textarea id="mc-snippet-editor"></textarea>
+			<!-- New Snippet Form Screen -->
+			<div id="mc-new-snippet-form" class="mc-modal-screen">
+				<div class="mc-form-group">
+					<label for="mc-snippet-name">Snippet Name</label>
+					<input type="text" id="mc-snippet-name" class="regular-text" placeholder="e.g., Custom Shortcodes">
+					<p class="description">Enter a descriptive name for your snippet. The filename will be auto-generated.</p>
+				</div>
+				<div class="mc-form-group">
+					<label for="mc-snippet-description">Description</label>
+					<textarea id="mc-snippet-description" class="large-text" rows="3" placeholder="Describe what this snippet does..."></textarea>
+					<p class="description">Briefly describe the purpose of this snippet.</p>
+				</div>
+				<div class="mc-form-group">
+					<label>Generated Filename</label>
+					<div id="mc-generated-filename" class="mc-filename-preview">-</div>
+				</div>
+			</div>
+			
+			<!-- Editor Screen -->
+			<div id="mc-editor-screen" class="mc-modal-screen" style="display: none;">
+				<div class="mc-editor-container">
+					<textarea id="mc-snippet-editor"></textarea>
+				</div>
 			</div>
 		</div>
 		<div class="mc-modal-footer">
 			<button type="button" class="button button-secondary mc-modal-close">Cancel</button>
+			<button type="button" class="button button-primary" id="mc-create-snippet" style="display: none;">Create Snippet</button>
 			<button type="button" class="button button-primary" id="mc-save-snippet">Save Changes</button>
 		</div>
 	</div>
@@ -262,6 +291,78 @@ add_action( 'wp_footer', function() {
 	flex: 1;
 	padding: 20px;
 	overflow: hidden;
+}
+
+.mc-modal-screen {
+	display: none; /* Hide all screens by default */
+}
+
+.mc-modal-screen.active {
+	display: block;
+}
+
+/* Form Styles */
+.mc-form-group {
+	margin-bottom: 20px;
+}
+
+.mc-form-group label {
+	display: block;
+	font-weight: 600;
+	margin-bottom: 5px;
+}
+
+.mc-form-group input,
+.mc-form-group textarea {
+	width: 100%;
+}
+
+.mc-form-group .description {
+	margin-top: 5px;
+	color: #666;
+	font-style: italic;
+}
+
+.mc-filename-preview {
+	background: #f1f1f1;
+	padding: 8px 12px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	font-family: 'Courier New', monospace;
+	font-size: 13px;
+	color: #333;
+}
+
+/* Slide Transition */
+.mc-modal-screen {
+	transition: transform 0.3s ease-in-out;
+}
+
+.mc-modal-screen.slide-out {
+	transform: translateX(-100%);
+}
+
+.mc-modal-screen.slide-in {
+	transform: translateX(0);
+}
+
+/* Add Snippet Button */
+.mc-add-snippet-section {
+	margin-top: 20px;
+	padding-top: 20px;
+	border-top: 1px solid #ddd;
+}
+
+.mc-add-snippet-section .button {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.mc-add-snippet-section .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
 }
 
 .mc-editor-container {
