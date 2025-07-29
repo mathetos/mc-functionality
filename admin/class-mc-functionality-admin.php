@@ -55,6 +55,30 @@ class Mc_Functionality_Admin {
 	}
 
 	/**
+	 * Register the admin menu.
+	 *
+	 * @since    1.0.0
+	 */
+	public function add_admin_menu() {
+		add_plugins_page(
+			'Site Functions', // Page title
+			'Site Functions', // Menu title
+			'manage_options', // Capability required
+			'mc-functionality', // Menu slug
+			array( $this, 'display_admin_page' ) // Callback function
+		);
+	}
+
+	/**
+	 * Display the admin page content.
+	 *
+	 * @since    1.0.0
+	 */
+	public function display_admin_page() {
+		require_once plugin_dir_path( __FILE__ ) . 'partials/mc-functionality-admin-display.php';
+	}
+
+	/**
 	 * Register the stylesheets for the admin area.
 	 *
 	 * @since    1.0.0
