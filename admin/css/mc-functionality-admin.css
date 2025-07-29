@@ -1,4 +1,530 @@
-/**
- * All of the CSS for your admin-specific functionality should be
- * included in this file.
- */
+/* MC Functionality Admin Styles */
+
+/* ==========================================================================
+   CodeMirror Editor Styles
+   ========================================================================== */
+
+.CodeMirror {
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+}
+
+.CodeMirror .cm-comment {
+    font-size: 14px !important;
+    line-height: 1.4 !important;
+}
+
+/* ==========================================================================
+   Main Content Layout
+   ========================================================================== */
+
+.mc-functionality-admin-content {
+    max-width: 1200px;
+}
+
+.mc-functionality-overview,
+.mc-functionality-snippets-status,
+.mc-functionality-usage,
+.mc-functionality-info,
+.mc-functionality-security {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+}
+
+.mc-functionality-overview h2,
+.mc-functionality-snippets-status h3,
+.mc-functionality-usage h3,
+.mc-functionality-info h3,
+.mc-functionality-security h3 {
+    margin-top: 0;
+    color: #23282d;
+}
+
+/* ==========================================================================
+   Tab Navigation
+   ========================================================================== */
+
+.nav-tab-wrapper {
+    margin-bottom: 20px;
+}
+
+.nav-tab {
+    text-decoration: none;
+}
+
+.nav-tab-active {
+    background: #fff;
+    border-bottom: 1px solid #fff;
+}
+
+/* ==========================================================================
+   Snippets List
+   ========================================================================== */
+
+.mc-snippets-list table {
+    margin-top: 10px;
+}
+
+.mc-snippets-list th {
+    font-weight: 600;
+}
+
+.snippet-status {
+    font-weight: 600;
+}
+
+.snippet-status.enabled {
+    color: #46b450;
+}
+
+.snippet-status.disabled {
+    color: #dc3232;
+}
+
+.mc-toggle-snippet {
+    min-width: 80px;
+}
+
+.mc-toggle-snippet:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.mc-edit-snippet {
+    color: #0073aa;
+    text-decoration: none;
+}
+
+.mc-edit-snippet:hover {
+    color: #005177;
+    text-decoration: underline;
+}
+
+.mc-add-snippet-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+}
+
+.mc-add-snippet-section .button {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.mc-add-snippet-section .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+/* ==========================================================================
+   Overview Tab Styles
+   ========================================================================== */
+
+.mc-usage-steps ol {
+    margin-left: 20px;
+}
+
+.mc-usage-steps li {
+    margin-bottom: 10px;
+}
+
+.mc-functionality-usage pre {
+    background: #f1f1f1;
+    padding: 15px;
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.mc-functionality-usage code {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+}
+
+.mc-functionality-security ul {
+    list-style: none;
+    padding: 0;
+}
+
+.mc-functionality-security li {
+    margin-bottom: 8px;
+    padding-left: 0;
+}
+
+.mc-overview-features {
+    margin: 20px 0;
+    padding: 20px;
+    background: #f9f9f9;
+    border-left: 4px solid #0073aa;
+    border-radius: 4px;
+}
+
+.mc-overview-features h4 {
+    margin-top: 0;
+    color: #23282d;
+}
+
+.mc-overview-features ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.mc-overview-features li {
+    margin-bottom: 8px;
+}
+
+/* ==========================================================================
+   Settings Tab Styles
+   ========================================================================== */
+
+.mc-functionality-settings {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+}
+
+.mc-functionality-settings h3 {
+    margin-top: 0;
+    color: #23282d;
+}
+
+.mc-functionality-settings .form-table th {
+    width: 200px;
+}
+
+/* ==========================================================================
+   Modal Styles - Optimized for Code Editing
+   ========================================================================== */
+
+.mc-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.mc-modal-content {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    width: 90vw;
+    max-width: 1400px;
+    height: 90vh;
+    max-height: 900px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.mc-modal-header {
+    flex-shrink: 0;
+    padding: 20px 25px 15px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #e6e6e6;
+}
+
+.mc-modal-header h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #23282d;
+}
+
+.mc-modal-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    color: #666;
+    font-size: 18px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.mc-modal-close:hover {
+    color: #000;
+    background: #e5e5e5;
+}
+
+.mc-modal-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+}
+
+.mc-modal-footer {
+    flex-shrink: 0;
+    padding: 25px;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    background: #e6e6e6;
+}
+
+/* ==========================================================================
+   Modal Screens
+   ========================================================================== */
+
+.mc-modal-screen {
+    display: none;
+    height: 100%;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.mc-modal-screen.active {
+    display: flex !important;
+    flex-direction: column;
+}
+
+/* ==========================================================================
+   Form Styles
+   ========================================================================== */
+
+.mc-form-group {
+    margin-bottom: 20px;
+}
+
+.mc-form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.mc-form-group input,
+.mc-form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.2s ease;
+}
+
+.mc-form-group input:focus,
+.mc-form-group textarea:focus {
+    border-color: #0073aa;
+    outline: none;
+    box-shadow: 0 0 0 1px #0073aa;
+}
+
+.mc-form-group .description {
+    margin-top: 5px;
+    color: #666;
+    font-style: italic;
+    font-size: 13px;
+}
+
+.mc-filename-preview {
+    background: #f1f1f1;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    color: #333;
+}
+
+/* ==========================================================================
+   Editor Container - Optimized for Maximum Code Space
+   ========================================================================== */
+
+.mc-editor-container {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin: 20px;
+    overflow: hidden;
+}
+
+.mc-editor-container .CodeMirror {
+    flex: 1;
+    height: 100% !important;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+#mc-snippet-editor {
+    height: 100%;
+    min-height: 0;
+}
+
+/* ==========================================================================
+   Snippet Settings - Compact and Efficient
+   ========================================================================== */
+
+.mc-snippet-settings {
+    flex-shrink: 0;
+    padding: 15px 20px;
+}
+
+.mc-settings-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: baseline;
+}
+
+.mc-setting-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #333;
+    font-size: 13px;
+}
+
+.mc-setting-group select,
+.mc-setting-group input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.mc-setting-group .description {
+    margin-top: 3px;
+    color: #666;
+    font-style: italic;
+    font-size: 12px;
+}
+
+/* ==========================================================================
+   Loading States
+   ========================================================================== */
+
+.mc-loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.mc-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #0073aa;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   Plugin Action Links
+   ========================================================================== */
+
+/* Style the "Site Functions" link in plugin list */
+.plugin-action-links a[href*="page=mc-functionality"] {
+    font-weight: 600;
+    color: #0073aa;
+    display: inline-flex;
+    align-items: center;
+}
+
+.plugin-action-links a[href*="page=mc-functionality"]:hover {
+    color: #005177;
+}
+
+.plugin-action-links a[href*="page=mc-functionality"] .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+/* ==========================================================================
+   Modal Error Messages
+   ========================================================================== */
+
+.mc-error-message {
+    background: #dc3232;
+    color: white;
+    padding: 12px 20px;
+    margin: 0;
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 100002;
+}
+
+.mc-error-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.mc-error-content .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+.mc-error-close {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 3px;
+    transition: background-color 0.2s ease;
+}
+
+.mc-error-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.mc-error-close .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+}
+
+/* ==========================================================================
+   WordPress Notices
+   ========================================================================== */
+
+/* Ensure notices appear above modal */
+.notice {
+    z-index: 100001;
+    position: relative;
+}
+
+/* Auto-dismiss animation */
+.notice.fade-out {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
