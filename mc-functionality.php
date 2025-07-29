@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       MC Functionality
  * Plugin URI:        https://www.mattcromwell.com/mc-functionality
- * Description:       A functionality plugin you can build within WP Admin. Think "Code Snippets" but better performance and security. 
+ * Description:       A file-based code snippet system for WordPress. Load and execute PHP files from the /code-snippets/ directory with better performance and security than database-stored snippets.
  * Version:           1.0.0
  * Author:            Matt Cromwell
  * Author URI:        https://www.mattcromwell.com/
@@ -36,6 +36,28 @@ if ( ! defined( 'WPINC' ) ) {
  * Rename this for your plugin and update it as you release new versions.
  */
 define( 'MC_FUNCTIONALITY_VERSION', '1.0.0' );
+
+/**
+ * Plugin snippets directory path.
+ * This is where PHP code snippets are stored and loaded from.
+ */
+define( 'MC_FUNCTIONALITY_SNIPPETS_DIR', plugin_dir_path( __FILE__ ) . 'code-snippets' );
+
+/**
+ * Load code snippets early in the WordPress lifecycle.
+ * This ensures snippets are available before other plugins and themes load.
+ */
+function load_mc_functionality_snippets() {
+	// Load the snippet loader class
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-mc-functionality-snippet-loader.php';
+	
+	// Initialize and load snippets
+	$snippet_loader = new Mc_Functionality_Snippet_Loader();
+	$snippet_loader->load_snippets();
+}
+
+// Hook to load snippets early in the WordPress lifecycle
+add_action( 'plugins_loaded', 'load_mc_functionality_snippets', 5 );
 
 /**
  * The code that runs during plugin activation.
