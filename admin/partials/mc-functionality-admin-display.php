@@ -50,7 +50,11 @@ $loaded_snippets = $snippet_loader->get_loaded_snippets();
 						<tbody>
 							<?php foreach ( $loaded_snippets as $snippet_file ) : ?>
 								<tr>
-									<td><strong><?php echo esc_html( basename( $snippet_file ) ); ?></strong></td>
+									<td>
+										<a href="#" class="mc-edit-snippet" data-filename="<?php echo esc_attr( basename( $snippet_file ) ); ?>">
+											<strong><?php echo esc_html( basename( $snippet_file ) ); ?></strong>
+										</a>
+									</td>
 									<td><code><?php echo esc_html( $snippet_file ); ?></code></td>
 									<td><span class="dashicons dashicons-yes-alt" style="color: #46b450;"></span> Loaded</td>
 								</tr>
@@ -117,6 +121,27 @@ add_action( 'wp_footer', function() {
 	</div>
 </div>
 
+<!-- Snippet Editor Modal -->
+<div id="mc-snippet-editor-modal" class="mc-modal-overlay" style="display: none;">
+	<div class="mc-modal-content">
+		<div class="mc-modal-header">
+			<h2 id="mc-editor-title">Edit Snippet</h2>
+			<button type="button" class="mc-modal-close" aria-label="Close editor">
+				<span class="dashicons dashicons-no-alt"></span>
+			</button>
+		</div>
+		<div class="mc-modal-body">
+			<div class="mc-editor-container">
+				<textarea id="mc-snippet-editor"></textarea>
+			</div>
+		</div>
+		<div class="mc-modal-footer">
+			<button type="button" class="button button-secondary mc-modal-close">Cancel</button>
+			<button type="button" class="button button-primary" id="mc-save-snippet">Save Changes</button>
+		</div>
+	</div>
+</div>
+
 <style>
 .mc-functionality-admin-content {
 	max-width: 1200px;
@@ -179,5 +204,119 @@ add_action( 'wp_footer', function() {
 
 .mc-snippets-list th {
 	font-weight: 600;
+}
+
+/* Modal Styles */
+.mc-modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.7);
+	z-index: 100000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.mc-modal-content {
+	background: #fff;
+	border-radius: 4px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+	max-width: 90vw;
+	max-height: 90vh;
+	width: 800px;
+	display: flex;
+	flex-direction: column;
+}
+
+.mc-modal-header {
+	padding: 20px 20px 0 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid #ddd;
+	padding-bottom: 15px;
+}
+
+.mc-modal-header h2 {
+	margin: 0;
+	font-size: 18px;
+}
+
+.mc-modal-close {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 5px;
+	color: #666;
+	font-size: 20px;
+}
+
+.mc-modal-close:hover {
+	color: #000;
+}
+
+.mc-modal-body {
+	flex: 1;
+	padding: 20px;
+	overflow: hidden;
+}
+
+.mc-editor-container {
+	height: 500px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+}
+
+.mc-editor-container .CodeMirror {
+	height: 100%;
+	font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+	font-size: 13px;
+}
+
+.mc-modal-footer {
+	padding: 15px 20px 20px 20px;
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+	border-top: 1px solid #ddd;
+}
+
+/* Clickable snippet links */
+.mc-edit-snippet {
+	color: #0073aa;
+	text-decoration: none;
+}
+
+.mc-edit-snippet:hover {
+	color: #005177;
+	text-decoration: underline;
+}
+
+/* Loading state */
+.mc-loading {
+	opacity: 0.6;
+	pointer-events: none;
+}
+
+.mc-loading::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 20px;
+	height: 20px;
+	margin: -10px 0 0 -10px;
+	border: 2px solid #f3f3f3;
+	border-top: 2px solid #0073aa;
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
 }
 </style>

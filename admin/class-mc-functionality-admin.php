@@ -122,6 +122,121 @@ class Mc_Functionality_Admin {
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/mc-functionality-admin.js', array( 'jquery' ), $this->version, false );
 
+		// Enqueue WordPress code editor for snippet editing
+		wp_enqueue_code_editor( array( 'type' => 'text/x-php' ) );
+
+		// Localize script for AJAX
+		wp_localize_script( $this->plugin_name, 'mc_functionality_ajax', array(
+			'ajax_url' => admin_url( 'admin-ajax.php' ),
+			'nonce'    => wp_create_nonce( 'mc_functionality_editor_nonce' ),
+		) );
+
+	}
+
+	/**
+	 * Register AJAX handlers for snippet editor.
+	 *
+	 * @since    1.0.0
+	 */
+	public function register_ajax_handlers() {
+		add_action( 'wp_ajax_mc_functionality_get_snippet', array( $this, 'ajax_get_snippet' ) );
+		add_action( 'wp_ajax_mc_functionality_save_snippet', array( $this, 'ajax_save_snippet' ) );
+	}
+
+	/**
+	 * AJAX handler to get snippet content.
+	 *
+	 * @since    1.0.0
+	 */
+	public function ajax_get_snippet() {
+		// Verify nonce
+		if ( ! wp_verify_nonce( $_POST['nonce'], 'mc_functionality_editor_nonce' ) ) {
+			wp_die( 'Security check failed' );
+		}
+
+		// Check permissions
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( 'Insufficient permissions' );
+		}
+
+		$filename = sanitize_text_field( $_POST['filename'] );
+		
+		// Validate filename
+		if ( empty( $filename ) || ! preg_match( '/^[a-zA-Z0-9\-_\.]+\.php$/', $filename ) ) {
+			wp_send_json_error( 'Invalid filename' );
+		}
+
+		$file_path = MC_FUNCTIONALITY_SNIPPETS_DIR . '/' . $filename;
+
+		// Security check: ensure file is within snippets directory
+		$real_file_path = realpath( $file_path );
+		$real_snippets_dir = realpath( MC_FUNCTIONALITY_SNIPPETS_DIR );
+		
+		if ( $real_file_path === false || $real_snippets_dir === false || strpos( $real_file_path, $real_snippets_dir ) !== 0 ) {
+			wp_send_json_error( 'File not found or access denied' );
+		}
+
+		// Check if file exists and is readable
+		if ( ! file_exists( $file_path ) || ! is_readable( $file_path ) ) {
+			wp_send_json_error( 'File not found or not readable' );
+		}
+
+		// Read file content
+		$content = file_get_contents( $file_path );
+		if ( $content === false ) {
+			wp_send_json_error( 'Unable to read file' );
+		}
+
+		wp_send_json_success( array(
+			'content' => $content,
+			'filename' => $filename,
+		) );
+	}
+
+	/**
+	 * AJAX handler to save snippet content.
+	 *
+	 * @since    1.0.0
+	 */
+	public function ajax_save_snippet() {
+		// Verify nonce
+		if ( ! wp_verify_nonce( $_POST['nonce'], 'mc_functionality_editor_nonce' ) ) {
+			wp_die( 'Security check failed' );
+		}
+
+		// Check permissions
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( 'Insufficient permissions' );
+		}
+
+		$filename = sanitize_text_field( $_POST['filename'] );
+		$content = wp_unslash( $_POST['content'] );
+		
+		// Validate filename
+		if ( empty( $filename ) || ! preg_match( '/^[a-zA-Z0-9\-_\.]+\.php$/', $filename ) ) {
+			wp_send_json_error( 'Invalid filename' );
+		}
+
+		$file_path = MC_FUNCTIONALITY_SNIPPETS_DIR . '/' . $filename;
+
+		// Security check: ensure file is within snippets directory
+		$real_file_path = realpath( dirname( $file_path ) );
+		$real_snippets_dir = realpath( MC_FUNCTIONALITY_SNIPPETS_DIR );
+		
+		if ( $real_file_path === false || $real_snippets_dir === false || strpos( $real_file_path, $real_snippets_dir ) !== 0 ) {
+			wp_send_json_error( 'File not found or access denied' );
+		}
+
+		// Write file content
+		$result = file_put_contents( $file_path, $content );
+		if ( $result === false ) {
+			wp_send_json_error( 'Unable to save file' );
+		}
+
+		wp_send_json_success( array(
+			'message' => 'File saved successfully',
+			'filename' => $filename,
+		) );
 	}
 
 }
